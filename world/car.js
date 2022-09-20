@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import * as CANNON from 'cannon-es';
+import * as OIMO from 'oimo';
 import CannonDebugger from 'cannon-es-debugger';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -54,7 +54,7 @@ export default class Car {
     const gltfLoader = new GLTFLoader(manager);
     const dracoLoader = new DRACOLoader();
 
-       this.world.defaultContactMaterial.friction = 0;
+       this.world.defaultfriction = 0;
    
     dracoLoader.setDecoderConfig({ type: 'js' });
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
@@ -89,17 +89,17 @@ export default class Car {
   }
 
   setChassis() {
-    const chassisShape = new CANNON.Box(
-      new CANNON.Vec3(
+    const chassisShape = new OIMO.Box(
+      new OIMO.Vec3(
         this.chassisDimension.x * 0.45,
         this.chassisDimension.y * 0.4,
         this.chassisDimension.z * 0.5
       )
     );
 
-    const carMaterial = new CANNON.Material({ wireframe: true, friction: 5 });
+    const carMaterial = new OIMO.Material({ wireframe: true, friction: 5 });
 
-    const carContactMaterial = new CANNON.ContactMaterial(
+    const carContactMaterial = new OIMO.ContactMaterial(
       this.carMaterial,
       this.carMaterial,
       {
@@ -107,22 +107,22 @@ export default class Car {
         restitution: 2,
       }
     );
-    const chassisTop = new CANNON.Body({
+    const chassisTop = new OIMO.Body({
       mass: this.mass,
       material: carMaterial,
     });
     
-    const chassisTopS = new CANNON.Cylinder(0.3,0.3,3)
+    const chassisTopS = new OIMO.Cylinder(0.3,0.3,3)
     // chassisTop.addShape(chassisTopS)
 
 
 
     
-    const chassisBody = new CANNON.Body({
+    const chassisBody = new OIMO.Body({
       mass: this.mass,
       material: carMaterial,
     });
-    this.car = new CANNON.RaycastVehicle({
+    this.car = new OIMO.RaycastVehicle({
       chassisBody,
       indexRightAxis: 0,
       indexUpAxis: 1,
@@ -130,7 +130,7 @@ export default class Car {
     });
 
 ///////-------- bordel pour rotate Cylindre
-    // chassisBody.addShape(chassisTopS, new CANNON.Vec3(0,1,0), new CANNON.Quaternion(0.75,0,0,-Math.PI*0.5))
+    // chassisBody.addShape(chassisTopS, new OIMO.Vec3(0,1,0), new OIMO.Quaternion(0.75,0,0,-Math.PI*0.5))
     
     // this.sliding = false;
     chassisBody.addShape(chassisShape);
@@ -143,7 +143,7 @@ export default class Car {
     this.car.wheelInfos = [];
     this.car.addWheel({
       radius: 0.34,
-      directionLocal: new CANNON.Vec3(0, -1, 0),
+      directionLocal: new OIMO.Vec3(0, -1, 0),
       suspensionStiffness: 55,
       suspensionRestLength: 0.5,
       frictionSlip: 30,
@@ -151,14 +151,14 @@ export default class Car {
       dampingCompression: 4.3,
       maxSuspensionForce: 1000,
       rollInfluence: 0.01,
-      axleLocal: new CANNON.Vec3(-1, 0, 0),
-      chassisConnectionPointLocal: new CANNON.Vec3(0.75, 0.1, -1.21),
+      axleLocal: new OIMO.Vec3(-1, 0, 0),
+      chassisConnectionPointLocal: new OIMO.Vec3(0.75, 0.1, -1.21),
       maxSuspensionTravel: 1,
       customSlidingRotationalSpeed: 30,
     });
     this.car.addWheel({
       radius: 0.34,
-      directionLocal: new CANNON.Vec3(0, -1, 0),
+      directionLocal: new OIMO.Vec3(0, -1, 0),
       suspensionStiffness: 55,
       suspensionRestLength: 0.5,
       frictionSlip: 30,
@@ -166,14 +166,14 @@ export default class Car {
       dampingCompression: 4.3,
       maxSuspensionForce: 10000,
       rollInfluence: 0.01,
-      axleLocal: new CANNON.Vec3(-1, 0, 0),
-      chassisConnectionPointLocal: new CANNON.Vec3(-0.78, 0.1, -1.21),
+      axleLocal: new OIMO.Vec3(-1, 0, 0),
+      chassisConnectionPointLocal: new OIMO.Vec3(-0.78, 0.1, -1.21),
       maxSuspensionTravel: 1,
       customSlidingRotationalSpeed: 30,
     });
     this.car.addWheel({
       radius: 0.34,
-      directionLocal: new CANNON.Vec3(0, -1, 0),
+      directionLocal: new OIMO.Vec3(0, -1, 0),
       suspensionStiffness: 55,
       suspensionRestLength: 0.5,
       frictionSlip: 30,
@@ -181,14 +181,14 @@ export default class Car {
       dampingCompression: 4.3,
       // maxSuspensionForce: 10000,
       rollInfluence: 0.01,
-      axleLocal: new CANNON.Vec3(-1, 0, 0),
-      chassisConnectionPointLocal: new CANNON.Vec3(0.75, 0.1, 1.43),
+      axleLocal: new OIMO.Vec3(-1, 0, 0),
+      chassisConnectionPointLocal: new OIMO.Vec3(0.75, 0.1, 1.43),
       maxSuspensionTravel: 1,
       customSlidingRotationalSpeed: 30,
     });
     this.car.addWheel({
       radius: 0.34,
-      directionLocal: new CANNON.Vec3(0, -1, 0),
+      directionLocal: new OIMO.Vec3(0, -1, 0),
       suspensionStiffness: 55,
       suspensionRestLength: 0.5,
       frictionSlip: 30,
@@ -196,42 +196,42 @@ export default class Car {
       dampingCompression: 4.3,
       // maxSuspensionForce: 10000,
       rollInfluence: 0.01,
-      axleLocal: new CANNON.Vec3(-1, 0, 0),
-      chassisConnectionPointLocal: new CANNON.Vec3(-0.78, 0.1, 1.43),
+      axleLocal: new OIMO.Vec3(-1, 0, 0),
+      chassisConnectionPointLocal: new OIMO.Vec3(-0.78, 0.1, 1.43),
       maxSuspensionTravel: 1,
       customSlidingRotationalSpeed: 30,
     });
 
     this.car.wheelInfos.forEach(
       function (wheel, index) {
-        const cylinderShape = new CANNON.Cylinder(
+        const cylinderShape = new OIMO.Cylinder(
           wheel.radius,
           wheel.radius,
           wheel.radius / 2,
           20
         );
-        const wheelBody = new CANNON.Body({
+        const wheelBody = new OIMO.Body({
           mass: 1,
-          material: new CANNON.Material({ friction: 0 }),
+          material: new OIMO.Material({ friction: 0 }),
         });
-        const quaternion = new CANNON.Quaternion().setFromEuler(
+        const quaternion = new OIMO.Quaternion().setFromEuler(
           -Math.PI / 2,
           0,
           0
         );
-        wheelBody.addShape(cylinderShape, new CANNON.Vec3(), quaternion);
+        wheelBody.addShape(cylinderShape, new OIMO.Vec3(), quaternion);
         // this.wheels[index].wheelBody = wheelBody;
       }.bind(this)
     );
   }
 
   // debug() {
-  //   const cannonDebugger = new CannonDebugger(this.scene, this.world, {
+  //   const OIMODebugger = new OIMODebugger(this.scene, this.world, {
   //     // options...
   //     color: 0xff0000,
   //     scale: 1,
   //   });
-  //   // cannonDebugger.update()
+  //   // OIMODebugger.update()
   // }
  
 

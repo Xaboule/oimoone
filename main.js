@@ -2,6 +2,7 @@ import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as CANNON from 'cannon-es';
+import * as OIMO from 'oimo'
 import CannonDebugger from 'cannon-es-debugger';
 import Stats from 'stats-js';
 import Car from './world/car';
@@ -19,11 +20,15 @@ document.body.appendChild(stats.dom);
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
 const scene = new THREE.Scene();
-const world = new CANNON.World({
-  gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
+const world = new OIMO.World({ 
+  timestep: 1/60, 
+  iterations: 8, 
+  broadphase: 2, // 1 brute force, 2 sweep and prune, 3 volume tree
+  worldscale: 1, // scale full world 
+  random: true,  // randomize sample
+  info: false,   // calculate statistic or not
+  gravity: [0,-9.8,0] 
 });
-world.broadphase = new CANNON.SAPBroadphase(world);
-// cannonDebugger(scene, world.bodies, {color: 0x00ff00})
 
 const cannonDebugger = new CannonDebugger(scene, world, {
   // options...
@@ -42,19 +47,19 @@ const sizes = {
   height: window.innerHeight,
 };
 
-const bodyMaterial = new CANNON.Material();
-const groundMaterial = new CANNON.Material();
-const bodyGroundContactMaterial = new CANNON.ContactMaterial(
-  bodyMaterial,
-  groundMaterial,
-  {
-    friction: 0.1,
-    restitution: 0.3,
-  }
-);
-world.addContactMaterial(bodyGroundContactMaterial);
+// const bodyMaterial = new CANNON.Material();
+// const groundMaterial = new CANNON.Material();
+// const bodyGroundContactMaterial = new CANNON.ContactMaterial(
+//   bodyMaterial,
+//   groundMaterial,
+//   {
+//     friction: 0.1,
+//     restitution: 0.3,
+//   }
+// );
+// world.addContactMaterial(bodyGroundContactMaterial);
 
-const car = new Car(scene, world, groundMaterial);
+const car = new Car(scene, world);
 car.init();
 
 /**
